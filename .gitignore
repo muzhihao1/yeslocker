@@ -1,54 +1,94 @@
-### gradle ###
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
-
-### STS ###
-.settings/
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-
-
-### IntelliJ IDEA ###
-/.idea/
-/private/
-/storage/
-/litemall.iml
-.checkstyle
-.idea
-*.iws
-*.iml
-*.ipr
-rebel.xml
-### maven ###
-target/
+# Java
+*.class
+*.jar
 *.war
 *.ear
-*.zip
-*.tar
-*.tar.gz
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-### logs ####
-/logs/
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# UniApp
+.DS_Store
+dist/
+dist-ssr/
+*.local
+.env.local
+.env.*.local
+
+# Logs
+logs/
 *.log
 
-### temp ignore ###
-*.cache
-*.diff
-*.patch
-*.tmp
-*.java~
-*.properties~
-*.xml~
-
-### system ignore ###
+# OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-Servers
-.metadata
-upload
-gen_code
+
+# Application specific
+storage/
+uploads/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# Database
+*.sqlite
+*.db
+
+# Sensitive files
+application-prod.yml
+application-local.yml
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Package files
+*.zip
+*.tar.gz
+*.rar
+
+# Build output
+build/
+out/

@@ -1,0 +1,126 @@
+# Litemall 开发环境配置文件
+# 适用于耶氏台球杆存取系统
+
+spring:
+  profiles:
+    active: dev
+  # 数据源配置
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/yeslocker?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456  # 请修改为实际密码
+      initial-size: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 1 FROM DUAL
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      filters: stat,wall,log4j2
+  # Redis 配置
+  redis:
+    host: localhost
+    port: 6379
+    password:  # Redis 密码，如果没有设置则留空
+    database: 0
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# MyBatis 配置
+mybatis:
+  mapper-locations: classpath:org/linlinjava/litemall/db/dao/*.xml
+  type-aliases-package: org.linlinjava.litemall.db.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开发环境打印 SQL
+
+# 分页插件配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.linlinjava.litemall.db: DEBUG
+    org.linlinjava.litemall: DEBUG
+
+# Litemall 业务配置
+litemall:
+  # 开发环境配置
+  profile: dev
+  # 微信配置
+  wx:
+    app-id: wxxxxxxxxxxxxxxxxxxx  # 请替换为实际的小程序 AppID
+    app-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 请替换为实际的小程序 AppSecret
+    mch-id: 1111111111  # 商户号（如果需要支付功能）
+    mch-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 商户密钥（如果需要支付功能）
+    notify-url: http://localhost:8080/wx/order/pay-notify
+    # 模板消息配置
+    template:
+      # 存储成功通知
+      store-success: template_id_1
+      # 即将到期提醒
+      expire-remind: template_id_2
+      # 取回成功通知
+      retrieve-success: template_id_3
+  # 存储配置（七牛云）
+  storage:
+    active: local  # 开发环境使用本地存储
+    local:
+      storage-path: storage
+      address: http://localhost:8080/wx/storage/fetch/
+    qiniu:
+      endpoint: http://xxxxxx.com
+      access-key: xxxxxx
+      secret-key: xxxxxx
+      bucket-name: litemall
+  # 快递配置（暂时不需要）
+  express:
+    enable: false
+  # 短信配置
+  notify:
+    enable: false
+    type: none  # 可选：aliyun, tencent
+    sms:
+      enable: false
+  # 储物柜业务配置
+  locker:
+    # 清理提醒天数
+    clean-alert-days: 90
+    # 凭证有效天数
+    voucher-valid-days: 30
+    # 每用户最大存储数
+    max-store-per-user: 1
+    # 启用微信通知
+    enable-wechat-notify: true
+    # 每日操作限制
+    daily-operation-limit: 10
+    # 图片大小限制（MB）
+    image-size-limit: 5
+    # 二维码生成服务
+    qrcode:
+      provider: qrserver  # 可选：qrserver, qiniu
+      size: 300
+      margin: 2

@@ -1,0 +1,142 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "耶氏台球杆存取",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/storage/index",
+			"style": {
+				"navigationBarTitleText": "存储球杆"
+			}
+		},
+		{
+			"path": "pages/storage/verify",
+			"style": {
+				"navigationBarTitleText": "身份验证"
+			}
+		},
+		{
+			"path": "pages/storage/select-locker",
+			"style": {
+				"navigationBarTitleText": "选择储物柜"
+			}
+		},
+		{
+			"path": "pages/storage/confirm",
+			"style": {
+				"navigationBarTitleText": "确认信息"
+			}
+		},
+		{
+			"path": "pages/storage/voucher",
+			"style": {
+				"navigationBarTitleText": "存储凭证"
+			}
+		},
+		{
+			"path": "pages/retrieval/index",
+			"style": {
+				"navigationBarTitleText": "取回球杆"
+			}
+		},
+		{
+			"path": "pages/retrieval/confirm",
+			"style": {
+				"navigationBarTitleText": "确认取杆"
+			}
+		},
+		{
+			"path": "pages/marketplace/index",
+			"style": {
+				"navigationBarTitleText": "二手商城"
+			}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/user/history",
+			"style": {
+				"navigationBarTitleText": "操作记录"
+			}
+		},
+		{
+			"path": "pages/user/profile",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/user/settings",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "耶氏台球杆存取",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#F8F8F8",
+		"backgroundTextStyle": "light",
+		"backgroundColorTop": "#F8F8F8",
+		"backgroundColorBottom": "#F8F8F8",
+		"mp-alipay": {
+			"titleBarColor": "#FFFFFF"
+		}
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#1890ff",
+		"borderStyle": "white",
+		"backgroundColor": "#FFFFFF",
+		"list": [
+			{
+				"pagePath": "pages/home/index",
+				"iconPath": "static/tabbar/home.png",
+				"selectedIconPath": "static/tabbar/home-active.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/storage/index",
+				"iconPath": "static/tabbar/storage.png",
+				"selectedIconPath": "static/tabbar/storage-active.png",
+				"text": "存杆"
+			},
+			{
+				"pagePath": "pages/marketplace/index",
+				"iconPath": "static/tabbar/shop.png",
+				"selectedIconPath": "static/tabbar/shop-active.png",
+				"text": "商城"
+			},
+			{
+				"pagePath": "pages/user/index",
+				"iconPath": "static/tabbar/user.png",
+				"selectedIconPath": "static/tabbar/user-active.png",
+				"text": "我的"
+			}
+		]
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "存储页面",
+				"path": "pages/storage/index",
+				"query": ""
+			},
+			{
+				"name": "取杆页面",
+				"path": "pages/retrieval/index",
+				"query": ""
+			}
+		]
+	}
+}
