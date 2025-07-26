@@ -583,6 +583,37 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/locker',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'lockerManage',
+    meta: {
+      title: '储物柜管理',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/locker/list'),
+        name: 'lockerList',
+        meta: {
+          title: '储物柜列表',
+          noCache: true
+        }
+      },
+      {
+        path: 'operation',
+        component: () => import('@/views/locker/operation'),
+        name: 'operationList',
+        meta: {
+          title: '操作记录',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
     path: '/profile',
     component: Layout,
     redirect: 'noredirect',
