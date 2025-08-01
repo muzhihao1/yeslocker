@@ -1,5 +1,6 @@
-# Litemall 开发环境配置文件
+# Litemall 开发环境配置文件模板
 # 适用于耶氏台球杆存取系统
+# 复制此文件为 application-dev.yml 并填入真实配置
 
 spring:
   profiles:
@@ -10,7 +11,7 @@ spring:
       url: jdbc:mysql://localhost:3306/yeslocker?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&verifyServerCertificate=false&useSSL=false
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
-      password: 123456  # 请修改为实际密码
+      password: YOUR_MYSQL_PASSWORD   # 请填入您的MySQL密码
       initial-size: 5
       max-active: 20
       min-idle: 5
@@ -27,7 +28,7 @@ spring:
   redis:
     host: localhost
     port: 6379
-    password:  # Redis 密码，如果没有设置则留空
+    password: YOUR_REDIS_PASSWORD  # Redis 密码，如果没有设置则留空
     database: 0
     timeout: 3000ms
     lettuce:
@@ -72,11 +73,13 @@ litemall:
   profile: dev
   # 微信配置
   wx:
-    app-id: wxxxxxxxxxxxxxxxxxxx  # 请替换为实际的小程序 AppID
-    app-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 请替换为实际的小程序 AppSecret
+    app-id: YOUR_WECHAT_APPID  # 请替换为实际的小程序 AppID
+    app-secret: YOUR_WECHAT_APPSECRET  # 请替换为实际的小程序 AppSecret
     mch-id: 1111111111  # 商户号（如果需要支付功能）
-    mch-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  # 商户密钥（如果需要支付功能）
+    mch-key: YOUR_WECHAT_MCH_KEY  # 商户密钥（如果需要支付功能）
     notify-url: http://localhost:8080/wx/order/pay-notify
+    # Mock mode for development (enables test users without real WeChat authentication)
+    mock-mode: true
     # 模板消息配置
     template:
       # 存储成功通知
@@ -92,19 +95,39 @@ litemall:
       storage-path: storage
       address: http://localhost:8080/wx/storage/fetch/
     qiniu:
-      endpoint: http://xxxxxx.com
-      access-key: xxxxxx
-      secret-key: xxxxxx
+      endpoint: YOUR_QINIU_ENDPOINT
+      access-key: YOUR_QINIU_ACCESS_KEY
+      secret-key: YOUR_QINIU_SECRET_KEY
       bucket-name: litemall
   # 快递配置（暂时不需要）
   express:
     enable: false
-  # 短信配置
+  # 通知配置
   notify:
-    enable: false
-    type: none  # 可选：aliyun, tencent
+    # 邮件配置
+    mail:
+      enable: false
+      host: smtp.163.com
+      username: YOUR_EMAIL@example.com
+      password: YOUR_EMAIL_PASSWORD
+      sendfrom: YOUR_EMAIL@example.com
+      sendto: adminYOUR_EMAIL@example.com
+      port: 465
+    # 短信配置
     sms:
       enable: false
+      active: tencent  # 可选：aliyun, tencent
+      sign: YesLocker
+      template:
+        - name: captcha
+          templateId: 12345
+      tencent:
+        appid: YOUR_TENCENT_SMS_APPID
+        appkey: YOUR_TENCENT_SMS_APPKEY
+      aliyun:
+        regionId: cn-hangzhou
+        accessKeyId: YOUR_ALIYUN_ACCESS_KEY_ID
+        accessKeySecret: YOUR_ALIYUN_ACCESS_KEY_SECRET
   # 储物柜业务配置
   locker:
     # 清理提醒天数

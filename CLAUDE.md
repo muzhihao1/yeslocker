@@ -189,6 +189,26 @@ npm run test:e2e
 3. Submit for review
 4. Configure server domain whitelist
 
+## Recent Updates (2025-07-26)
+
+### Flow Optimizations
+1. **No Approval Required**: Requests go directly to "active" status
+2. **Key Return Confirmation**: Added popup reminder for returning keys
+3. **Status Flow**: Active → Key Returned → Completed
+4. **Locker Status Sync**: Automatically updates based on operation completion
+
+### UI Changes
+1. **Removed QR Code Section**: Simplified request detail page
+2. **Key Return Modal**: Converted from bottom section to popup modal
+3. **Consistent Mock Data**: Created `/src/utils/mockData.js` for unified data across all pages
+
+### Modal Display Issue - Resolved ✅
+The `uni.showModal` timing issue has been resolved by adding a `setTimeout` wrapper:
+- **Problem**: Modal not displaying when called directly from button click
+- **Solution**: Wrap modal call in `setTimeout(..., 100)` to avoid timing conflicts
+- **Location**: `/src/pages/storage/request-detail.vue` - `showKeyReturnModal()` method
+- See `/docs/modal-troubleshooting.md` for detailed debugging history
+
 ## Important Notes
 
 - **UniApp Priority**: Using UniApp for cross-platform capability, WeChat Mini Program is the primary target

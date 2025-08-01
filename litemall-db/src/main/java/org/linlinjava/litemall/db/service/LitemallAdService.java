@@ -60,4 +60,15 @@ public class LitemallAdService {
     public LitemallAd findById(Integer id) {
         return adMapper.selectByPrimaryKey(id);
     }
+
+    /**
+     * 根据位置查询广告
+     * @param position 广告位置
+     * @return 广告列表
+     */
+    public List<LitemallAd> queryByPosition(Byte position) {
+        LitemallAdExample example = new LitemallAdExample();
+        example.or().andPositionEqualTo(position).andDeletedEqualTo(false).andEnabledEqualTo(true);
+        return adMapper.selectByExample(example);
+    }
 }

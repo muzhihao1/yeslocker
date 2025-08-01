@@ -72,7 +72,10 @@ temp/
 
 # Sensitive files
 application-prod.yml
+application-dev.yml
 application-local.yml
+.env.production
+.env.development
 *.pem
 *.key
 *.crt

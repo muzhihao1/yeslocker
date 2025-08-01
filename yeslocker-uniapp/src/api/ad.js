@@ -14,7 +14,7 @@ export function getAdList(position) {
 }
 
 /**
- * 记录广告点击
+ * 记录广告点击（暂时不需要跟踪，保留接口兼容性）
  * @param {number} adId - 广告ID
  * @returns {Promise<Object>} 记录结果
  */
@@ -23,7 +23,7 @@ export function recordAdClick(adId) {
 }
 
 /**
- * 记录广告展示
+ * 记录广告展示（暂时不需要跟踪，保留接口兼容性）
  * @param {Array<number>} adIds - 广告ID列表
  * @returns {Promise<Object>} 记录结果
  */

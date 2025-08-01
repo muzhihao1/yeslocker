@@ -47,20 +47,5 @@ export function scanVoucherQR(qrData) {
   return post('/voucher/scan', { qrData })
 }
 
-/**
- * 分享凭证
- * @param {string} code - 凭证码
- * @returns {Promise<Object>} 分享信息
- */
-export function shareVoucher(code) {
-  return post('/voucher/share', { code })
-}
-
-/**
- * 刷新凭证二维码
- * @param {string} code - 凭证码
- * @returns {Promise<Object>} 新的二维码URL
- */
-export function refreshVoucherQR(code) {
-  return post('/voucher/refresh-qr', { code })
-}
+// 分享和刷新二维码功能已移除 - 根据业务需求简化
+// 如需恢复，请联系开发团队
