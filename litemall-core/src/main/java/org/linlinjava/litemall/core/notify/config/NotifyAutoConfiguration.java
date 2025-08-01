@@ -4,6 +4,7 @@ import com.github.qcloudsms.SmsSingleSender;
 import org.linlinjava.litemall.core.notify.AliyunSmsSender;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.TencentSmsSender;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,18 +28,19 @@ public class NotifyAutoConfiguration {
         NotifyService notifyService = new NotifyService();
 
         NotifyProperties.Mail mailConfig = properties.getMail();
-        if (mailConfig.isEnable()) {
+        if (mailConfig != null && mailConfig.isEnable()) {
             notifyService.setMailSender(mailSender());
             notifyService.setSendFrom(mailConfig.getSendfrom());
             notifyService.setSendTo(mailConfig.getSendto());
         }
 
         NotifyProperties.Sms smsConfig = properties.getSms();
-        if (smsConfig.isEnable()) {
-            if(smsConfig.getActive().equals("tencent")) {
+        if (smsConfig != null && smsConfig.isEnable()) {
+            String active = smsConfig.getActive();
+            if(active != null && active.equals("tencent")) {
                 notifyService.setSmsSender(tencentSmsSender());
             }
-            else if(smsConfig.getActive().equals("aliyun")) {
+            else if(active != null && active.equals("aliyun")) {
                 notifyService.setSmsSender(aliyunSmsSender());
             }
 
@@ -48,6 +50,8 @@ public class NotifyAutoConfiguration {
         return notifyService;
     }
 
+    @Bean
+    @ConditionalOnProperty(prefix = "litemall.notify.mail", name = "enable", havingValue = "true")
     public JavaMailSender mailSender() {
         NotifyProperties.Mail mailConfig = properties.getMail();
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -68,6 +72,8 @@ public class NotifyAutoConfiguration {
         return mailSender;
     }
 
+    @Bean
+    @ConditionalOnProperty(prefix = "litemall.notify.sms", name = "active", havingValue = "tencent")
     public TencentSmsSender tencentSmsSender() {
         NotifyProperties.Sms smsConfig = properties.getSms();
         TencentSmsSender smsSender = new TencentSmsSender();
@@ -77,6 +83,8 @@ public class NotifyAutoConfiguration {
         return smsSender;
     }
 
+    @Bean
+    @ConditionalOnProperty(prefix = "litemall.notify.sms", name = "active", havingValue = "aliyun")
     public AliyunSmsSender aliyunSmsSender() {
         NotifyProperties.Sms smsConfig = properties.getSms();
         AliyunSmsSender smsSender = new AliyunSmsSender();

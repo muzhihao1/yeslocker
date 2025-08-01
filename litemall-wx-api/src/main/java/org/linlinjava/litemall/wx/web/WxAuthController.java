@@ -13,8 +13,10 @@ import org.linlinjava.litemall.core.util.RegexUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.util.bcrypt.BCryptPasswordEncoder;
 import org.linlinjava.litemall.db.domain.LitemallUser;
+import org.linlinjava.litemall.db.domain.LitemallLocker;
 import org.linlinjava.litemall.db.service.CouponAssignService;
 import org.linlinjava.litemall.db.service.LitemallUserService;
+import org.linlinjava.litemall.db.service.LitemallLockerService;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.linlinjava.litemall.wx.dto.UserInfo;
 import org.linlinjava.litemall.wx.dto.UserToken;
@@ -26,12 +28,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 
@@ -43,9 +48,15 @@ import static org.linlinjava.litemall.wx.util.WxResponseCode.*;
 @Validated
 public class WxAuthController {
     private final Log logger = LogFactory.getLog(WxAuthController.class);
+    
+    @Value("${litemall.wx.mock-mode:false}")
+    private boolean mockMode;
 
     @Autowired
     private LitemallUserService userService;
+    
+    @Autowired
+    private LitemallLockerService lockerService;
 
     @Autowired
     private WxMaService wxService;
@@ -124,12 +135,20 @@ public class WxAuthController {
 
         String sessionKey = null;
         String openId = null;
-        try {
-            WxMaJscode2SessionResult result = this.wxService.getUserService().getSessionInfo(code);
-            sessionKey = result.getSessionKey();
-            openId = result.getOpenid();
-        } catch (Exception e) {
-            e.printStackTrace();
+        
+        // Mock mode for development
+        if (mockMode) {
+            logger.info("[Mock Mode] WeChat login with code: " + code);
+            sessionKey = "mock-session-key-" + System.currentTimeMillis();
+            openId = generateMockOpenId(code);
+        } else {
+            try {
+                WxMaJscode2SessionResult result = this.wxService.getUserService().getSessionInfo(code);
+                sessionKey = result.getSessionKey();
+                openId = result.getOpenid();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (sessionKey == null || openId == null) {
@@ -150,6 +169,11 @@ public class WxAuthController {
             user.setLastLoginTime(LocalDateTime.now());
             user.setLastLoginIp(IpUtil.getIpAddr(request));
             user.setSessionKey(sessionKey);
+            
+            // Apply mock user data in mock mode
+            if (mockMode) {
+                setupMockUserData(user, openId);
+            }
 
             userService.add(user);
 
@@ -555,5 +579,288 @@ public class WxAuthController {
         data.put("mobile", user.getMobile());
 
         return ResponseUtil.ok(data);
+    }
+    
+    /**
+     * Get mock test users information (only available in mock mode)
+     * @return List of available test codes and their descriptions
+     */
+    @GetMapping("mock-users")
+    public Object getMockUsers() {
+        if (!mockMode) {
+            return ResponseUtil.fail(403, "Mock mode is not enabled");
+        }
+        
+        Map<String, Object> mockUsers = new HashMap<>();
+        mockUsers.put("description", "Use these codes in WeChat login to generate different test users");
+        
+        List<Map<String, String>> users = new ArrayList<>();
+        
+        Map<String, String> newUser = new HashMap<>();
+        newUser.put("code", "test-new-user-001");
+        newUser.put("description", "New user without verification");
+        newUser.put("features", "No mobile, no locker assigned");
+        users.add(newUser);
+        
+        Map<String, String> verifiedUser = new HashMap<>();
+        verifiedUser.put("code", "test-verified-user-001");
+        verifiedUser.put("description", "Verified user with locker");
+        verifiedUser.put("features", "Mobile verified, locker assigned");
+        users.add(verifiedUser);
+        
+        Map<String, String> activeStorageUser = new HashMap<>();
+        activeStorageUser.put("code", "test-active-storage-001");
+        activeStorageUser.put("description", "User with active storage");
+        activeStorageUser.put("features", "Has cue stick stored in locker");
+        users.add(activeStorageUser);
+        
+        Map<String, String> expiredStorageUser = new HashMap<>();
+        expiredStorageUser.put("code", "test-expired-storage-001");
+        expiredStorageUser.put("description", "User with expired storage");
+        expiredStorageUser.put("features", "Storage period exceeded 30 days");
+        users.add(expiredStorageUser);
+        
+        Map<String, String> vipUser = new HashMap<>();
+        vipUser.put("code", "test-vip-user-001");
+        vipUser.put("description", "VIP member");
+        vipUser.put("features", "VIP privileges, priority access");
+        users.add(vipUser);
+        
+        Map<String, String> adminUser = new HashMap<>();
+        adminUser.put("code", "test-admin-001");
+        adminUser.put("description", "Admin user");
+        adminUser.put("features", "System administrator privileges");
+        users.add(adminUser);
+        
+        mockUsers.put("users", users);
+        return ResponseUtil.ok(mockUsers);
+    }
+
+    /**
+     * 身份验证
+     * 用于注册流程中的身份验证步骤
+     *
+     * @param body 请求内容
+     *             {
+     *             realName: xxx,
+     *             idCard: xxx,
+     *             mobile: xxx,
+     *             smsCode: xxx
+     *             }
+     * @return 验证结果
+     */
+    @PostMapping("verify")
+    public Object verify(@LoginUser Integer userId, @RequestBody String body) {
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+
+        String realName = JacksonUtil.parseString(body, "realName");
+        String idCard = JacksonUtil.parseString(body, "idCard");
+        String mobile = JacksonUtil.parseString(body, "mobile");
+        String smsCode = JacksonUtil.parseString(body, "smsCode");
+
+        if (StringUtils.isEmpty(realName) || StringUtils.isEmpty(idCard) || 
+            StringUtils.isEmpty(mobile) || StringUtils.isEmpty(smsCode)) {
+            return ResponseUtil.badArgument();
+        }
+
+        // 验证手机号格式
+        if (!RegexUtil.isMobileSimple(mobile)) {
+            return ResponseUtil.fail(AUTH_INVALID_MOBILE, "手机号格式不正确");
+        }
+
+        // 验证短信验证码
+        String cacheCode = CaptchaCodeManager.getCachedCaptcha(mobile);
+        if (cacheCode == null || cacheCode.isEmpty() || !cacheCode.equals(smsCode)) {
+            return ResponseUtil.fail(AUTH_CAPTCHA_UNMATCH, "验证码错误");
+        }
+
+        // TODO: 这里可以调用第三方身份验证服务验证身份证信息
+        // 目前仅做基本格式校验
+        if (!RegexUtil.isIdCard(idCard)) {
+            return ResponseUtil.fail(701, "身份证号格式不正确");
+        }
+
+        // 更新用户信息
+        LitemallUser user = userService.findById(userId);
+        user.setMobile(mobile);
+        // TODO: 添加实名信息字段到用户表
+        // user.setRealName(realName);
+        // user.setIdCard(idCard);
+        // user.setIdentityVerified(true);
+        
+        if (userService.updateById(user) == 0) {
+            return ResponseUtil.updatedDataFailed();
+        }
+
+        return ResponseUtil.ok();
+    }
+
+    /**
+     * 完成注册（包含身份验证和储物柜分配）
+     * 
+     * @param userId 用户ID
+     * @param body 请求体 {
+     *             realName: xxx,
+     *             idCard: xxx,
+     *             mobile: xxx,
+     *             smsCode: xxx,
+     *             lockerId: xxx,
+     *             storeId: xxx
+     *             }
+     * @return 注册结果
+     */
+    @PostMapping("complete-registration")
+    public Object completeRegistration(@LoginUser Integer userId, @RequestBody String body) {
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+
+        String realName = JacksonUtil.parseString(body, "realName");
+        String idCard = JacksonUtil.parseString(body, "idCard");
+        String mobile = JacksonUtil.parseString(body, "mobile");
+        String smsCode = JacksonUtil.parseString(body, "smsCode");
+        Integer lockerId = JacksonUtil.parseInteger(body, "lockerId");
+        Integer storeId = JacksonUtil.parseInteger(body, "storeId");
+
+        if (StringUtils.isEmpty(realName) || StringUtils.isEmpty(idCard) || 
+            StringUtils.isEmpty(mobile) || StringUtils.isEmpty(smsCode) ||
+            lockerId == null || storeId == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        // 验证手机号格式
+        if (!RegexUtil.isMobileSimple(mobile)) {
+            return ResponseUtil.fail(AUTH_INVALID_MOBILE, "手机号格式不正确");
+        }
+
+        // 验证短信验证码
+        String cacheCode = CaptchaCodeManager.getCachedCaptcha(mobile);
+        if (cacheCode == null || cacheCode.isEmpty() || !cacheCode.equals(smsCode)) {
+            return ResponseUtil.fail(AUTH_CAPTCHA_UNMATCH, "验证码错误");
+        }
+
+        // 验证身份证格式
+        if (!RegexUtil.isIdCard(idCard)) {
+            return ResponseUtil.fail(701, "身份证号格式不正确");
+        }
+
+        // 检查用户是否已经有储物柜
+        LitemallUser user = userService.findById(userId);
+        if (user.getLockerId() != null) {
+            return ResponseUtil.fail(502, "您已经有专属储物柜了");
+        }
+
+        // 检查储物柜是否存在且可用
+        LitemallLocker locker = lockerService.findById(lockerId);
+        if (locker == null) {
+            return ResponseUtil.fail(503, "储物柜不存在");
+        }
+        
+        // 验证储物柜是否属于选择的门店
+        if (!locker.getStoreId().equals(storeId)) {
+            return ResponseUtil.fail(504, "储物柜不属于选择的门店");
+        }
+        
+        if (!"available".equals(locker.getStatus())) {
+            return ResponseUtil.fail(505, "该储物柜不可用");
+        }
+
+        try {
+            // 更新用户信息
+            user.setMobile(mobile);
+            user.setLockerId(lockerId);
+            user.setStoreId(storeId);
+            // TODO: 添加实名信息字段到用户表
+            // user.setRealName(realName);
+            // user.setIdCard(idCard);
+            // user.setIdentityVerified(true);
+            userService.updateById(user);
+            
+            // 更新储物柜状态为已分配
+            locker.setAssignedUserId(userId);
+            locker.setStatus("assigned");
+            locker.setCurrentUserId(userId);
+            lockerService.updateById(locker);
+
+            // 返回用户信息
+            UserInfo userInfo = new UserInfo();
+            userInfo.setNickName(user.getNickname());
+            userInfo.setAvatarUrl(user.getAvatar());
+            userInfo.setMobile(user.getMobile());
+            
+            Map<String, Object> result = new HashMap<>();
+            result.put("token", UserTokenManager.generateToken(userId));
+            result.put("userInfo", userInfo);
+            
+            return ResponseUtil.ok(result);
+        } catch (Exception e) {
+            logger.error("完成注册失败", e);
+            return ResponseUtil.fail(506, "注册失败，请重试");
+        }
+    }
+    
+    /**
+     * Generate mock OpenID based on code for testing
+     */
+    private String generateMockOpenId(String code) {
+        if (code == null || code.isEmpty()) {
+            return "mock-openid-" + System.currentTimeMillis();
+        }
+        
+        // Different codes generate different mock users
+        if (code.startsWith("test-new-user")) {
+            return "mock-new-user-" + code.substring(14);
+        } else if (code.startsWith("test-verified-user")) {
+            return "mock-verified-user-" + code.substring(19);
+        } else if (code.startsWith("test-active-storage")) {
+            return "mock-active-storage-" + code.substring(20);
+        } else if (code.startsWith("test-expired-storage")) {
+            return "mock-expired-storage-" + code.substring(21);
+        } else if (code.startsWith("test-vip-user")) {
+            return "mock-vip-user-" + code.substring(14);
+        } else if (code.startsWith("test-admin")) {
+            return "mock-admin-user-" + code.substring(11);
+        }
+        
+        // Default mock user
+        return "mock-default-user-" + Math.abs(code.hashCode());
+    }
+    
+    /**
+     * Create mock user data for different test scenarios
+     */
+    private void setupMockUserData(LitemallUser user, String openId) {
+        if (openId.startsWith("mock-verified-user")) {
+            // Verified user with complete profile
+            user.setMobile("13800138001");
+            user.setUserLevel((byte) 1);
+            user.setLockerId(5);
+            user.setStoreId(1);
+        } else if (openId.startsWith("mock-active-storage")) {
+            // User with active storage
+            user.setMobile("13800138002");
+            user.setUserLevel((byte) 1);
+            user.setLockerId(10);
+            user.setStoreId(1);
+            // Note: Storage record should be created separately
+        } else if (openId.startsWith("mock-expired-storage")) {
+            // User with expired storage
+            user.setMobile("13800138003");
+            user.setUserLevel((byte) 1);
+            user.setLockerId(15);
+            user.setStoreId(1);
+        } else if (openId.startsWith("mock-vip-user")) {
+            // VIP user
+            user.setMobile("13800138004");
+            user.setUserLevel((byte) 2); // VIP level
+            user.setLockerId(20);
+            user.setStoreId(1);
+        } else if (openId.startsWith("mock-admin-user")) {
+            // Admin user
+            user.setMobile("13800138888");
+            user.setUserLevel((byte) 3); // Admin level
+        }
     }
 }

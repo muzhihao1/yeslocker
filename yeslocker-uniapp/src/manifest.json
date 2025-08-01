@@ -1,10 +1,15 @@
 {
-	"name": "",
-	"appid": "",
-	"description": "",
+	"name": "耶氏台球杆存取",
+	"appid": "__UNI__YESLOCKER",
+	"description": "专业的台球杆储物柜管理系统，提供便捷的存取服务",
 	"versionName": "1.0.0",
 	"versionCode": "100",
 	"transformPx": false,
+	"networkTimeout": {
+		"request": 60000,
+		"uploadFile": 60000,
+		"downloadFile": 60000
+	},
 	"app-plus": { /* 5+App特有相关 */
 		"usingComponents": true,
 		"splashscreen": {
@@ -54,11 +59,58 @@
 
 	},
 	"mp-weixin": { /* 微信小程序特有相关 */
-		"appid": "",
+		"appid": "wx6f413f085381f6aa",
 		"setting": {
-			"urlCheck": false
+			"urlCheck": false,
+			"es6": true,
+			"enhance": true,
+			"postcss": true,
+			"preloadBackgroundData": false,
+			"minified": true,
+			"newFeature": true,
+			"coverView": true,
+			"nodeModules": false,
+			"autoAudits": false,
+			"showShadowRootInWxmlPanel": true,
+			"scopeDataCheck": false,
+			"uglifyFileName": false,
+			"checkInvalidKey": true,
+			"checkSiteMap": true,
+			"uploadWithSourceMap": true,
+			"compileHotReLoad": false,
+			"lazyloadPlaceholderEnable": false,
+			"useMultiFrameRuntime": true,
+			"useApiHook": true,
+			"useApiHostProcess": true,
+			"babelSetting": {
+				"ignore": [],
+				"disablePlugins": [],
+				"outputPath": ""
+			},
+			"useIsolateContext": true,
+			"userConfirmedBundleSwitch": false,
+			"packNpmManually": false,
+			"packNpmRelationList": [],
+			"minifyWXSS": true,
+			"disableUseStrict": false,
+			"showES6CompileOption": false,
+			"useCompilerPlugins": false,
+			"minifyWXML": true
 		},
-		"usingComponents": true
+		"usingComponents": true,
+		"permission": {
+			"scope.userLocation": {
+				"desc": "获取您的位置信息用于查找附近的储物柜"
+			}
+		},
+		"requiredPrivateInfos": [
+			"chooseLocation",
+			"getLocation",
+			"onLocationChange",
+			"startLocationUpdateBackground",
+			"chooseAddress"
+		],
+		"lazyCodeLoading": "requiredComponents"
 	},
 	"mp-alipay" : {
         "usingComponents" : true

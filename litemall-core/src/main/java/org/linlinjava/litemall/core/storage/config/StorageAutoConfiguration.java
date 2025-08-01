@@ -1,6 +1,8 @@
 package org.linlinjava.litemall.core.storage.config;
 
 import org.linlinjava.litemall.core.storage.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,44 +38,56 @@ public class StorageAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public LocalStorage localStorage() {
         LocalStorage localStorage = new LocalStorage();
         StorageProperties.Local local = this.properties.getLocal();
-        localStorage.setAddress(local.getAddress());
-        localStorage.setStoragePath(local.getStoragePath());
+        if (local != null) {
+            localStorage.setAddress(local.getAddress());
+            localStorage.setStoragePath(local.getStoragePath());
+        }
         return localStorage;
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "litemall.storage", name = "active", havingValue = "aliyun")
     public AliyunStorage aliyunStorage() {
         AliyunStorage aliyunStorage = new AliyunStorage();
         StorageProperties.Aliyun aliyun = this.properties.getAliyun();
-        aliyunStorage.setAccessKeyId(aliyun.getAccessKeyId());
-        aliyunStorage.setAccessKeySecret(aliyun.getAccessKeySecret());
-        aliyunStorage.setBucketName(aliyun.getBucketName());
-        aliyunStorage.setEndpoint(aliyun.getEndpoint());
+        if (aliyun != null) {
+            aliyunStorage.setAccessKeyId(aliyun.getAccessKeyId());
+            aliyunStorage.setAccessKeySecret(aliyun.getAccessKeySecret());
+            aliyunStorage.setBucketName(aliyun.getBucketName());
+            aliyunStorage.setEndpoint(aliyun.getEndpoint());
+        }
         return aliyunStorage;
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "litemall.storage", name = "active", havingValue = "tencent")
     public TencentStorage tencentStorage() {
         TencentStorage tencentStorage = new TencentStorage();
         StorageProperties.Tencent tencent = this.properties.getTencent();
-        tencentStorage.setSecretId(tencent.getSecretId());
-        tencentStorage.setSecretKey(tencent.getSecretKey());
-        tencentStorage.setBucketName(tencent.getBucketName());
-        tencentStorage.setRegion(tencent.getRegion());
+        if (tencent != null) {
+            tencentStorage.setSecretId(tencent.getSecretId());
+            tencentStorage.setSecretKey(tencent.getSecretKey());
+            tencentStorage.setBucketName(tencent.getBucketName());
+            tencentStorage.setRegion(tencent.getRegion());
+        }
         return tencentStorage;
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "litemall.storage", name = "active", havingValue = "qiniu")
     public QiniuStorage qiniuStorage() {
         QiniuStorage qiniuStorage = new QiniuStorage();
         StorageProperties.Qiniu qiniu = this.properties.getQiniu();
-        qiniuStorage.setAccessKey(qiniu.getAccessKey());
-        qiniuStorage.setSecretKey(qiniu.getSecretKey());
-        qiniuStorage.setBucketName(qiniu.getBucketName());
-        qiniuStorage.setEndpoint(qiniu.getEndpoint());
+        if (qiniu != null) {
+            qiniuStorage.setAccessKey(qiniu.getAccessKey());
+            qiniuStorage.setSecretKey(qiniu.getSecretKey());
+            qiniuStorage.setBucketName(qiniu.getBucketName());
+            qiniuStorage.setEndpoint(qiniu.getEndpoint());
+        }
         return qiniuStorage;
     }
 }

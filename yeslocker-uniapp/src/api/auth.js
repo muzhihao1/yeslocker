@@ -12,7 +12,8 @@ import { post, get } from '@/utils/request'
  * @returns {Promise<Object>} 登录结果
  */
 export function loginByWeixin(params) {
-  return post('/auth/login_by_weixin', params)
+  // 使用完整的微信登录接口路径
+  return post('/wx/auth/login_by_weixin', params)
 }
 
 /**
@@ -25,7 +26,7 @@ export function loginByWeixin(params) {
  * @returns {Promise<Object>} 验证结果
  */
 export function verifyIdentity(params) {
-  return post('/auth/verify', params)
+  return post('/wx/auth/verify', params)
 }
 
 /**
@@ -34,7 +35,7 @@ export function verifyIdentity(params) {
  * @returns {Promise<Object>} 发送结果
  */
 export function sendSmsCode(mobile) {
-  return post('/auth/captcha', { mobile, type: 'verify' })
+  return post('/wx/auth/captcha', { mobile, type: 'verify' })
 }
 
 /**
@@ -42,7 +43,7 @@ export function sendSmsCode(mobile) {
  * @returns {Promise<Object>} 用户信息
  */
 export function getUserInfo() {
-  return get('/user/info')
+  return get('/wx/user/info')
 }
 
 /**
@@ -51,7 +52,7 @@ export function getUserInfo() {
  * @returns {Promise<Object>} 更新结果
  */
 export function updateUserInfo(params) {
-  return post('/user/profile', params)
+  return post('/wx/user/profile', params)
 }
 
 /**
@@ -59,5 +60,20 @@ export function updateUserInfo(params) {
  * @returns {Promise<Object>} 退出结果
  */
 export function logout() {
-  return post('/auth/logout')
+  return post('/wx/auth/logout')
+}
+
+/**
+ * 完成用户注册（包含身份验证和储物柜分配）
+ * @param {Object} params - 注册参数
+ * @param {string} params.realName - 真实姓名
+ * @param {string} params.idCard - 身份证号
+ * @param {string} params.mobile - 手机号
+ * @param {string} params.smsCode - 短信验证码
+ * @param {string} params.lockerId - 选择的储物柜ID
+ * @param {number} params.storeId - 选择的门店ID
+ * @returns {Promise<Object>} 注册结果
+ */
+export function completeRegistration(params) {
+  return post('/wx/auth/complete-registration', params)
 }

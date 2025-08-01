@@ -1,9 +1,11 @@
 <template>
   <view class="user-card">
     <view class="user-card__avatar">
-      <image 
+      <lazy-image 
         :src="avatarUrl || '/static/default-avatar.png'" 
         mode="aspectFill"
+        :width="96"
+        :height="96"
         @error="handleImageError"
       />
     </view>
@@ -12,7 +14,7 @@
       <view class="user-card__phone" v-if="phoneNumber">
         {{ formatPhone(phoneNumber) }}
       </view>
-      <view class="user-card__status" :class="`user-card__status--${status}`">
+      <view class="user-card__status" :class="'user-card__status--' + status">
         <text class="status-dot"></text>
         {{ statusText }}
       </view>
@@ -35,7 +37,8 @@ export default {
     },
     userName: {
       type: String,
-      default: ''
+      default: '',
+      validator: (value) => value === null || value === undefined || typeof value === 'string'
     },
     phoneNumber: {
       type: String,
@@ -88,6 +91,11 @@ export default {
   background-color: #ffffff;
   border-radius: 16rpx;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  
+  * {
+    box-sizing: border-box;
+  }
   
   &__avatar {
     width: 96rpx;
@@ -96,12 +104,14 @@ export default {
     overflow: hidden;
     margin-right: 24rpx;
     flex-shrink: 0;
-    
-    image {
-      width: 100%;
-      height: 100%;
-    }
   }
+}
+
+// 微信小程序兼容: 使用后代选择器代替嵌套标签选择器
+.user-card__avatar image {
+  width: 100%;
+  height: 100%;
+  display: block;
   
   &__info {
     flex: 1;

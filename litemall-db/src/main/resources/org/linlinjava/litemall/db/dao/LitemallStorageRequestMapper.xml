@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.linlinjava.litemall.db.dao.LitemallStorageRequestMapper">
+  <resultMap id="BaseResultMap" type="org.linlinjava.litemall.db.domain.LitemallStorageRequest">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="request_code" jdbcType="VARCHAR" property="requestCode" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="locker_id" jdbcType="INTEGER" property="lockerId" />
+    <result column="store_id" jdbcType="INTEGER" property="storeId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="staff_id" jdbcType="INTEGER" property="staffId" />
+    <result column="approved_at" jdbcType="TIMESTAMP" property="approvedAt" />
+    <result column="completed_at" jdbcType="TIMESTAMP" property="completedAt" />
+    <result column="notes" jdbcType="LONGVARCHAR" property="notes" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, request_code, user_id, locker_id, store_id, type, status, staff_id, approved_at, 
+    completed_at, notes, add_time, update_time, deleted
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litemall_storage_request
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litemall_storage_request
+    where user_id = #{userId,jdbcType=INTEGER} and deleted = 0
+    order by add_time desc
+  </select>
+  
+  <select id="selectActiveByUserId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litemall_storage_request
+    where user_id = #{userId,jdbcType=INTEGER} 
+    and status = 'active'
+    and deleted = 0
+    order by add_time desc
+  </select>
+  
+  <select id="selectByRequestCode" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litemall_storage_request
+    where request_code = #{requestCode,jdbcType=VARCHAR} and deleted = 0
+  </select>
+  
+  <select id="selectByStatus" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from litemall_storage_request
+    where status = #{status,jdbcType=VARCHAR} and deleted = 0
+    order by add_time desc
+  </select>
+  
+  <select id="generateRequestCode" resultType="java.lang.String">
+    SELECT generate_request_code()
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from litemall_storage_request
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="org.linlinjava.litemall.db.domain.LitemallStorageRequest">
+    insert into litemall_storage_request (id, request_code, user_id, 
+      locker_id, store_id, type, status, 
+      staff_id, approved_at, completed_at, 
+      notes, add_time, update_time, 
+      deleted)
+    values (#{id,jdbcType=INTEGER}, #{requestCode,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{lockerId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{staffId,jdbcType=INTEGER}, #{approvedAt,jdbcType=TIMESTAMP}, #{completedAt,jdbcType=TIMESTAMP}, 
+      #{notes,jdbcType=LONGVARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=BIT})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="org.linlinjava.litemall.db.domain.LitemallStorageRequest">
+    insert into litemall_storage_request
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="requestCode != null">
+        request_code,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="lockerId != null">
+        locker_id,
+      </if>
+      <if test="storeId != null">
+        store_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="staffId != null">
+        staff_id,
+      </if>
+      <if test="approvedAt != null">
+        approved_at,
+      </if>
+      <if test="completedAt != null">
+        completed_at,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="requestCode != null">
+        #{requestCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="lockerId != null">
+        #{lockerId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null">
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null">
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="approvedAt != null">
+        #{approvedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completedAt != null">
+        #{completedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="org.linlinjava.litemall.db.domain.LitemallStorageRequest">
+    update litemall_storage_request
+    <set>
+      <if test="requestCode != null">
+        request_code = #{requestCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="lockerId != null">
+        locker_id = #{lockerId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null">
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null">
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="approvedAt != null">
+        approved_at = #{approvedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completedAt != null">
+        completed_at = #{completedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="org.linlinjava.litemall.db.domain.LitemallStorageRequest">
+    update litemall_storage_request
+    set request_code = #{requestCode,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      locker_id = #{lockerId,jdbcType=INTEGER},
+      store_id = #{storeId,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      staff_id = #{staffId,jdbcType=INTEGER},
+      approved_at = #{approvedAt,jdbcType=TIMESTAMP},
+      completed_at = #{completedAt,jdbcType=TIMESTAMP},
+      notes = #{notes,jdbcType=LONGVARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

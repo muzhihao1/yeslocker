@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- QR Code Scanner Icon -->
+  <!-- Corner brackets -->
+  <g stroke="#1890ff" stroke-width="4" fill="none">
+    <!-- Top-left corner -->
+    <path d="M 20 40 L 20 20 L 40 20" />
+    <!-- Top-right corner -->
+    <path d="M 160 20 L 180 20 L 180 40" />
+    <!-- Bottom-left corner -->
+    <path d="M 20 160 L 20 180 L 40 180" />
+    <!-- Bottom-right corner -->
+    <path d="M 180 160 L 180 180 L 160 180" />
+  </g>
+  
+  <!-- Center QR code pattern -->
+  <g fill="#1890ff">
+    <!-- Top-left pattern -->
+    <rect x="50" y="50" width="30" height="30" />
+    <rect x="60" y="60" width="10" height="10" fill="white" />
+    
+    <!-- Top-right pattern -->
+    <rect x="120" y="50" width="30" height="30" />
+    <rect x="130" y="60" width="10" height="10" fill="white" />
+    
+    <!-- Bottom-left pattern -->
+    <rect x="50" y="120" width="30" height="30" />
+    <rect x="60" y="130" width="10" height="10" fill="white" />
+    
+    <!-- Center dots -->
+    <rect x="90" y="90" width="8" height="8" />
+    <rect x="102" y="90" width="8" height="8" />
+    <rect x="90" y="102" width="8" height="8" />
+    <rect x="102" y="102" width="8" height="8" />
+  </g>
+  
+  <!-- Scan line animation -->
+  <rect x="30" y="95" width="140" height="2" fill="#1890ff" opacity="0.6">
+    <animate attributeName="y" 
+      values="30;170;30" 
+      dur="2s" 
+      repeatCount="indefinite" />
+    <animate attributeName="opacity" 
+      values="0.6;1;0.6" 
+      dur="2s" 
+      repeatCount="indefinite" />
+  </rect>
+</svg>

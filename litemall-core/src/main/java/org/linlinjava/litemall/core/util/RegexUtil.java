@@ -180,6 +180,16 @@ public class RegexUtil {
     }
 
     /**
+     * Return whether input matches regex of id card number (15 or 18 digits).
+     *
+     * @param input The input.
+     * @return {@code true}: yes<br>{@code false}: no
+     */
+    public static boolean isIdCard(final CharSequence input) {
+        return isIDCard15(input) || isIDCard18(input);
+    }
+
+    /**
      * Return whether input matches regex of email.
      *
      * @param input The input.

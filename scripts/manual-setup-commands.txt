@@ -1,0 +1,78 @@
+# 耶氏台球杆存取系统 - 手动安装命令列表
+# 请逐条执行以下命令
+
+# 1. 检查并安装 Homebrew（如果没有）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. 安装 Java 11
+brew install openjdk@11
+echo 'export PATH="/usr/local/opt/openjdk@11/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+java -version
+
+# 3. 安装 Maven
+brew install maven
+mvn -version
+
+# 4. 安装 MySQL 8.0
+brew install mysql@8.0
+brew services start mysql@8.0
+
+# 5. 配置 MySQL（设置 root 密码）
+mysql_secure_installation
+
+# 6. 安装 Redis
+brew install redis
+brew services start redis
+
+# 7. 创建数据库和用户（需要输入 MySQL root 密码）
+mysql -u root -p << EOF
+CREATE DATABASE IF NOT EXISTS yeslocker CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'yeslocker'@'localhost' IDENTIFIED BY 'yeslocker123456';
+GRANT ALL PRIVILEGES ON yeslocker.* TO 'yeslocker'@'localhost';
+FLUSH PRIVILEGES;
+EOF
+
+# 8. 导入数据库表结构
+cd /Users/liasiloam/Library/CloudStorage/Dropbox/项目开发/杆柜管理/yeslocker
+
+# 导入 Litemall 基础表
+mysql -u yeslocker -pyeslocker123456 yeslocker < litemall-db/sql/litemall_schema.sql
+mysql -u yeslocker -pyeslocker123456 yeslocker < litemall-db/sql/litemall_table.sql
+mysql -u yeslocker -pyeslocker123456 yeslocker < litemall-db/sql/litemall_data.sql
+
+# 导入储物柜扩展表
+mysql -u yeslocker -pyeslocker123456 yeslocker < sql/locker-extension.sql
+
+# 9. 配置 Maven 阿里云镜像
+mkdir -p ~/.m2
+cat > ~/.m2/settings.xml << 'EOF'
+<settings>
+  <mirrors>
+    <mirror>
+      <id>aliyun</id>
+      <mirrorOf>central</mirrorOf>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+
+# 10. 编译项目
+mvn clean install -DskipTests
+
+# 11. 创建启动脚本
+cat > start-backend.sh << 'EOF'
+#!/bin/bash
+cd /Users/liasiloam/Library/CloudStorage/Dropbox/项目开发/杆柜管理/yeslocker
+java -Dfile.encoding=UTF-8 -jar litemall-all/target/litemall-all-*-exec.jar --spring.profiles.active=dev
+EOF
+chmod +x start-backend.sh
+
+# 12. 启动后端服务
+./start-backend.sh
+
+# 完成后访问：
+# 管理后台：http://localhost:8080/admin/index.html
+# 默认账号：admin123
+# 默认密码：admin123

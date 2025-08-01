@@ -1,0 +1,6 @@
+# Fix configuration to disable problematic beans
+spring:
+  autoconfigure:
+    exclude:
+      - org.linlinjava.litemall.core.storage.config.StorageAutoConfiguration
+      - org.linlinjava.litemall.core.notify.config.NotifyAutoConfiguration

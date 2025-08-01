@@ -21,3 +21,13 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# WeChat Mini Program
+project.private.config.json
+sitemap.json
+.miniprogram/
+miniprogram_npm/
+*.wxss.map
+
+# HBuilderX
+.hbuilderx/

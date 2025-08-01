@@ -22,7 +22,8 @@
 		{
 			"path": "pages/storage/select-locker",
 			"style": {
-				"navigationBarTitleText": "选择储物柜"
+				"navigationBarTitleText": "选择储物柜",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -64,7 +65,8 @@
 		{
 			"path": "pages/user/history",
 			"style": {
-				"navigationBarTitleText": "操作记录"
+				"navigationBarTitleText": "操作记录",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -77,6 +79,114 @@
 			"path": "pages/user/settings",
 			"style": {
 				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/auth/register",
+			"style": {
+				"navigationBarTitleText": "用户注册"
+			}
+		},
+		{
+			"path": "pages/auth/store-select",
+			"style": {
+				"navigationBarTitleText": "选择门店"
+			}
+		},
+		{
+			"path": "pages/auth/locker-select",
+			"style": {
+				"navigationBarTitleText": "选择专属储物柜"
+			}
+		},
+		{
+			"path": "pages/auth/phone-verify",
+			"style": {
+				"navigationBarTitleText": "手机号验证"
+			}
+		},
+		{
+			"path": "pages/user/analytics",
+			"style": {
+				"navigationBarTitleText": "广告统计"
+			}
+		},
+		{
+			"path": "pages/admin/ad-manage",
+			"style": {
+				"navigationBarTitleText": "广告管理"
+			}
+		},
+		{
+			"path": "pages/user/membership",
+			"style": {
+				"navigationBarTitleText": "会员中心"
+			}
+		},
+		{
+			"path": "pages/test/login",
+			"style": {
+				"navigationBarTitleText": "测试登录"
+			}
+		},
+		{
+			"path": "pages/test/mock-login",
+			"style": {
+				"navigationBarTitleText": "Mock登录测试"
+			}
+		},
+		{
+			"path": "pages/storage/request",
+			"style": {
+				"navigationBarTitleText": "申请存取"
+			}
+		},
+		{
+			"path": "pages/storage/request-detail",
+			"style": {
+				"navigationBarTitleText": "申请详情"
+			}
+		},
+		{
+			"path": "pages/storage/requests",
+			"style": {
+				"navigationBarTitleText": "申请记录"
+			}
+		},
+		{
+			"path": "pages/locker/detail",
+			"style": {
+				"navigationBarTitleText": "我的储物柜"
+			}
+		},
+		{
+			"path": "pages/user/vouchers",
+			"style": {
+				"navigationBarTitleText": "我的凭证"
+			}
+		},
+		{
+			"path": "pages/marketplace/orders",
+			"style": {
+				"navigationBarTitleText": "商城订单"
+			}
+		},
+		{
+			"path": "pages/common/help",
+			"style": {
+				"navigationBarTitleText": "帮助中心"
+			}
+		},
+		{
+			"path": "pages/common/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈"
+			}
+		},
+		{
+			"path": "pages/common/about",
+			"style": {
+				"navigationBarTitleText": "关于我们"
 			}
 		}
 	],
@@ -100,26 +210,18 @@
 		"list": [
 			{
 				"pagePath": "pages/home/index",
-				"iconPath": "static/tabbar/home.png",
-				"selectedIconPath": "static/tabbar/home-active.png",
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/storage/index",
-				"iconPath": "static/tabbar/storage.png",
-				"selectedIconPath": "static/tabbar/storage-active.png",
-				"text": "存杆"
+				"pagePath": "pages/user/history",
+				"text": "记录"
 			},
 			{
 				"pagePath": "pages/marketplace/index",
-				"iconPath": "static/tabbar/shop.png",
-				"selectedIconPath": "static/tabbar/shop-active.png",
 				"text": "商城"
 			},
 			{
 				"pagePath": "pages/user/index",
-				"iconPath": "static/tabbar/user.png",
-				"selectedIconPath": "static/tabbar/user-active.png",
 				"text": "我的"
 			}
 		]

@@ -3,6 +3,42 @@
 
 const mockData = {
   // ========== 用户认证相关 ==========
+  '/wx/auth/login': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock.token',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 1,
+        username: 'admin123',
+        nickname: '管理员测试账号',
+        avatar: '/static/default-avatar.png',
+        mobile: '138****5678',
+        identityVerified: true,
+        isAdmin: true
+      }
+    }
+  },
+  
+  '/wx/auth/login_by_account': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mock.token',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 1,
+        username: 'admin123',
+        nickname: '管理员测试账号',
+        avatar: '/static/default-avatar.png',
+        mobile: '138****5678',
+        identityVerified: true,
+        isAdmin: true
+      }
+    }
+  },
+  
   '/wx/auth/login_by_weixin': {
     errno: 0,
     errmsg: '成功',
@@ -15,7 +51,106 @@ const mockData = {
         nickname: '测试用户',
         avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
         mobile: '138****5678',
-        identityVerified: false
+        identityVerified: false,
+        lockerId: null,
+        storeId: null,
+        userLevel: 0
+      }
+    }
+  },
+  
+  // Mock data for different test scenarios
+  '/wx/auth/login_by_weixin_new_user': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.new.user',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 101,
+        username: 'mock-new-user-001',
+        nickname: '新用户001',
+        avatar: '/static/default-avatar.png',
+        mobile: null,
+        identityVerified: false,
+        lockerId: null,
+        storeId: null,
+        userLevel: 0
+      }
+    }
+  },
+  
+  '/wx/auth/login_by_weixin_verified_user': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.verified.user',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 102,
+        username: 'mock-verified-user-001',
+        nickname: '张三（已认证）',
+        avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
+        mobile: '138****0001',
+        identityVerified: true,
+        lockerId: 5,
+        storeId: 1,
+        userLevel: 1,
+        realName: '张*',
+        idCard: '110***********1234'
+      }
+    }
+  },
+  
+  '/wx/auth/login_by_weixin_active_storage': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.active.storage',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 103,
+        username: 'mock-active-storage-001',
+        nickname: '李四（存储中）',
+        avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
+        mobile: '138****0002',
+        identityVerified: true,
+        lockerId: 10,
+        storeId: 1,
+        userLevel: 1,
+        hasActiveStorage: true,
+        activeStorageInfo: {
+          lockerId: 10,
+          cabinetNumber: 'B02',
+          storedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+          daysRemaining: 25,
+          voucherCode: '20240117-ACTIVE-001'
+        }
+      }
+    }
+  },
+  
+  '/wx/auth/login_by_weixin_vip_user': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.vip.user',
+      tokenExpire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      userInfo: {
+        id: 104,
+        username: 'mock-vip-user-001',
+        nickname: '王总（VIP会员）',
+        avatar: 'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
+        mobile: '138****8888',
+        identityVerified: true,
+        lockerId: 20,
+        storeId: 1,
+        userLevel: 2, // VIP level
+        vipInfo: {
+          level: 'gold',
+          expireDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString(),
+          privileges: ['priority_access', 'extended_storage', 'free_cleaning', 'exclusive_locker']
+        }
       }
     }
   },
@@ -71,7 +206,49 @@ const mockData = {
       success: true,
       lockerId: 5,
       cabinetNumber: 'A05',
-      retrievedAt: new Date().toISOString().slice(0, 19).replace('T', ' ')
+      zone: 'A区',
+      storeName: '耶氏台球店（旗舰店）',
+      storageTime: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+      retrievedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      expiryTime: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+      status: 'active',
+      notes: '红色球杆套，品牌：美洲豹',
+      overdueFee: 0,
+      warnings: []
+    }
+  },
+  
+  '/wx/voucher/list': {
+    errno: 0,
+    errmsg: '成功',
+    data: {
+      list: [
+        {
+          id: 1,
+          code: 'ABCD1234EFGH',
+          cabinetNumber: 'A12',
+          lockerNumber: 'A12',
+          zone: 'A区',
+          storeName: '耶氏台球店（旗舰店）',
+          createTime: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+          expiryTime: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+          status: 'active'
+        },
+        {
+          id: 2,
+          code: 'WXYZ5678IJKL',
+          cabinetNumber: 'B03',
+          lockerNumber: 'B03',
+          zone: 'B区',
+          storeName: '耶氏台球店（旗舰店）',
+          createTime: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+          expiryTime: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString().slice(0, 19).replace('T', ' '),
+          status: 'active'
+        }
+      ],
+      totalCount: 2,
+      page: 1,
+      limit: 10
     }
   },
 
@@ -252,25 +429,104 @@ const mockData = {
 
 // Mock 请求拦截器
 export function setupMock(request) {
-  // 开发环境启用 Mock
+  // 开发环境为登录接口启用 Mock（后端未就绪时使用）
   if (process.env.NODE_ENV === 'development') {
     const originalRequest = request;
     
     return function(options) {
       const { url } = options;
       
-      // 检查是否有对应的 Mock 数据
-      const mockKey = Object.keys(mockData).find(key => url.includes(key));
+      // 调试信息
+      console.log('[Mock] 拦截到请求:', url);
       
-      if (mockKey) {
-        // 返回 Mock 数据
-        return Promise.resolve({
-          statusCode: 200,
-          data: mockData[mockKey]
+      // 为登录接口启用 Mock
+      const mockKey = Object.keys(mockData).find(key => url.includes(key));
+      console.log('[Mock] 找到的 mockKey:', mockKey);
+      
+      // 专门为登录接口处理
+      if (url.includes('/auth/login') || url.includes('login_by_account') || url.includes('login_by_weixin')) {
+        console.log('[Mock] 匹配到登录接口，使用 Mock 数据');
+        console.log('[Mock] 登录请求数据:', options.data);
+        
+        // 处理微信登录的不同测试场景
+        if (url.includes('login_by_weixin') && options.data && options.data.code) {
+          const { code } = options.data;
+          let mockKey = '/wx/auth/login_by_weixin'; // 默认
+          
+          // 根据不同的 code 选择不同的 Mock 数据
+          if (code.startsWith('test-new-user')) {
+            mockKey = '/wx/auth/login_by_weixin_new_user';
+          } else if (code.startsWith('test-verified-user')) {
+            mockKey = '/wx/auth/login_by_weixin_verified_user';
+          } else if (code.startsWith('test-active-storage')) {
+            mockKey = '/wx/auth/login_by_weixin_active_storage';
+          } else if (code.startsWith('test-vip-user')) {
+            mockKey = '/wx/auth/login_by_weixin_vip_user';
+          }
+          
+          console.log(`[Mock] 使用测试场景: ${mockKey}`);
+          
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve({
+                statusCode: 200,
+                data: mockData[mockKey]
+              });
+            }, 500);
+          });
+        }
+        
+        // 找到对应的 Mock 数据
+        const responseMockKey = mockKey || '/wx/auth/login';
+        
+        // 延迟返回，模拟网络请求
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            // 根据不同的用户名返回不同的 Mock 数据
+            const { username } = options.data || {};
+            let mockResponse = mockData[responseMockKey];
+            
+            // 支持多个测试账号
+            if (username === 'user123') {
+              mockResponse = {
+                ...mockResponse,
+                data: {
+                  ...mockResponse.data,
+                  userInfo: {
+                    ...mockResponse.data.userInfo,
+                    username: 'user123',
+                    nickname: '普通用户测试账号',
+                    isAdmin: false
+                  }
+                }
+              };
+            } else if (username === 'locker_admin') {
+              mockResponse = {
+                ...mockResponse,
+                data: {
+                  ...mockResponse.data,
+                  userInfo: {
+                    ...mockResponse.data.userInfo,
+                    username: 'locker_admin',
+                    nickname: '储物柜管理员',
+                    isLockerAdmin: true
+                  }
+                }
+              };
+            }
+            
+            console.log('[Mock] 返回的 Mock 数据:', mockResponse);
+            
+            // 返回完整的响应对象，包含 statusCode 和 data
+            resolve({
+              statusCode: 200,
+              data: mockResponse
+            });
+          }, 500);
         });
       }
       
-      // 没有 Mock 数据则使用原始请求
+      // 其他请求使用原始请求
       return originalRequest(options);
     };
   }

@@ -2,6 +2,12 @@
 
 基于 Litemall 开源商城系统扩展的台球杆储物柜管理系统，采用 Spring Boot + UniApp 技术栈，使用 Context Engineering 架构方法设计。
 
+## 📊 项目进度
+
+- **后端开发**: 100% ✅ 完成
+- **前端开发**: 95% （待API集成）
+- **整体进度**: 97.5%
+
 ## 🚀 项目特点
 
 - **跨平台支持**：使用 UniApp 开发，可编译为微信小程序、H5、iOS/Android App
@@ -46,8 +52,8 @@ yeslocker/
 ## 🚀 快速开始
 
 ### 环境要求
-- JDK 1.8+
-- Maven 3.5+
+- JDK 11+ （推荐使用 OpenJDK 11）
+- Maven 3.6+
 - MySQL 8.0+
 - Redis 5.0+
 - Node.js 14+
@@ -79,10 +85,29 @@ cp application-dev.yml.example application-dev.yml
 
 4. 编译运行
 ```bash
-mvn clean install
-cd litemall-all
-mvn spring-boot:run
+mvn clean package
+java -jar litemall-all/target/litemall-all-*-exec.jar --spring.profiles.active=dev
+
+# 或使用启动脚本
+./start-backend.sh
 ```
+
+### 🔧 快速启动（推荐）
+
+```bash
+# 1. 检查环境
+./check-environment.sh
+
+# 2. 设置数据库
+./scripts/setup-database.sh
+
+# 3. 修改配置（编辑 application-dev.yml 中的数据库密码）
+
+# 4. 启动服务
+./start-backend.sh
+```
+
+详见 [快速启动指南](QUICK-START.md)
 
 ### 前端启动
 

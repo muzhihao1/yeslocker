@@ -610,6 +610,15 @@ export const asyncRoutes = [
           title: '操作记录',
           noCache: true
         }
+      },
+      {
+        path: 'store',
+        component: () => import('@/views/storage/store'),
+        name: 'storeList',
+        meta: {
+          title: '门店管理',
+          noCache: true
+        }
       }
     ]
   },

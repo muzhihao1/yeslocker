@@ -100,4 +100,25 @@ public class LitemallUserService {
     public void deleteById(Integer id) {
         userMapper.logicalDeleteByPrimaryKey(id);
     }
+
+    /**
+     * 统计指定时间范围内的用户数量
+     * @param startTime 开始时间（可为null表示不限制开始时间）
+     * @param endTime 结束时间（可为null表示不限制结束时间）
+     * @return 用户数量
+     */
+    public long countByAddTime(LocalDateTime startTime, LocalDateTime endTime) {
+        LitemallUserExample example = new LitemallUserExample();
+        LitemallUserExample.Criteria criteria = example.createCriteria();
+        
+        if (startTime != null) {
+            criteria.andAddTimeGreaterThanOrEqualTo(startTime);
+        }
+        if (endTime != null) {
+            criteria.andAddTimeLessThanOrEqualTo(endTime);
+        }
+        criteria.andDeletedEqualTo(false);
+        
+        return userMapper.countByExample(example);
+    }
 }

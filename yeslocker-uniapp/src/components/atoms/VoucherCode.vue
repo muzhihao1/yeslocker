@@ -1,8 +1,8 @@
 <template>
-  <view class="voucher-code" :class="`voucher-code--${status}`">
+  <view class="voucher-code" :class="'voucher-code--' + status">
     <view class="voucher-code__header">
       <text class="header-title">{{ title }}</text>
-      <view class="header-status" :class="`header-status--${status}`">
+      <view class="header-status" :class="'header-status--' + status">
         {{ statusText }}
       </view>
     </view>
@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import { previewQRCode } from '@/utils/qrcode'
+
 export default {
   name: 'VoucherCode',
   props: {
@@ -154,6 +156,12 @@ export default {
       return `${year}-${month}-${day} ${hours}:${minutes}`
     },
     handleQrClick() {
+      // 如果有二维码图片，预览它
+      if (this.qrCodeUrl) {
+        previewQRCode(this.qrCodeUrl)
+      }
+      
+      // 同时触发事件，允许父组件处理
       this.$emit('qr-click', {
         code: this.code,
         qrCodeUrl: this.qrCodeUrl

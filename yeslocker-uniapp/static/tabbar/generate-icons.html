@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+canvas { border: 1px solid #ccc; margin: 5px; }
+</style>
+</head>
+<body>
+<h3>TabBar Icons Generator</h3>
+<p>Right-click and save each icon as PNG</p>
+
+<!-- Home Icon -->
+<canvas id="home" width="48" height="48"></canvas>
+<canvas id="home-active" width="48" height="48"></canvas>
+
+<!-- Storage Icon -->
+<canvas id="storage" width="48" height="48"></canvas>
+<canvas id="storage-active" width="48" height="48"></canvas>
+
+<!-- Shop Icon -->
+<canvas id="shop" width="48" height="48"></canvas>
+<canvas id="shop-active" width="48" height="48"></canvas>
+
+<!-- User Icon -->
+<canvas id="user" width="48" height="48"></canvas>
+<canvas id="user-active" width="48" height="48"></canvas>
+
+<script>
+// Home icons
+function drawHome(ctx, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(6, 20);
+  ctx.lineTo(24, 6);
+  ctx.lineTo(42, 20);
+  ctx.lineTo(42, 40);
+  ctx.lineTo(30, 40);
+  ctx.lineTo(30, 28);
+  ctx.lineTo(18, 28);
+  ctx.lineTo(18, 40);
+  ctx.lineTo(6, 40);
+  ctx.closePath();
+  ctx.fill();
+}
+
+// Storage icons
+function drawStorage(ctx, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(8, 10, 32, 30);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(12, 14, 24, 4);
+  ctx.fillRect(12, 22, 24, 4);
+  ctx.fillRect(12, 30, 24, 4);
+}
+
+// Shop icons
+function drawShop(ctx, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(10, 18);
+  ctx.lineTo(14, 8);
+  ctx.lineTo(34, 8);
+  ctx.lineTo(38, 18);
+  ctx.lineTo(36, 40);
+  ctx.lineTo(12, 40);
+  ctx.closePath();
+  ctx.fill();
+  // Handle
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(24, 14, 6, Math.PI, 0, false);
+  ctx.stroke();
+}
+
+// User icons
+function drawUser(ctx, color) {
+  ctx.fillStyle = color;
+  // Head
+  ctx.beginPath();
+  ctx.arc(24, 16, 8, 0, Math.PI * 2);
+  ctx.fill();
+  // Body
+  ctx.beginPath();
+  ctx.arc(24, 40, 16, Math.PI, 0, false);
+  ctx.fill();
+}
+
+// Draw all icons
+drawHome(document.getElementById('home').getContext('2d'), '#999999');
+drawHome(document.getElementById('home-active').getContext('2d'), '#1890ff');
+
+drawStorage(document.getElementById('storage').getContext('2d'), '#999999');
+drawStorage(document.getElementById('storage-active').getContext('2d'), '#1890ff');
+
+drawShop(document.getElementById('shop').getContext('2d'), '#999999');
+drawShop(document.getElementById('shop-active').getContext('2d'), '#1890ff');
+
+drawUser(document.getElementById('user').getContext('2d'), '#999999');
+drawUser(document.getElementById('user-active').getContext('2d'), '#1890ff');
+</script>
+</body>
+</html>
