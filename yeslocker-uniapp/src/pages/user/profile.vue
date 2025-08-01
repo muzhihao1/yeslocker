@@ -466,46 +466,6 @@ export default {
       uni.navigateTo({
         url: '/pages/test/mock-login'
       })
-            country: '中国',
-            province: '广东',
-            city: '深圳',
-            language: 'zh_CN',
-            createTime: new Date().toISOString()
-          }
-        }
-        
-        // 保存登录信息到本地存储
-        uni.setStorageSync('token', mockLoginData.token)
-        uni.setStorageSync('userInfo', mockLoginData.userInfo)
-        
-        // 更新组件状态
-        this.userInfo = mockLoginData.userInfo
-        this.isLoggedIn = true
-        
-        uni.hideLoading()
-        
-        uni.showToast({
-          title: '测试登录成功',
-          icon: 'success',
-          duration: 2000
-        })
-        
-        // 模拟登录成功后的处理
-        setTimeout(() => {
-          uni.showModal({
-            title: '温馨提示',
-            content: '您正在使用测试账号，部分功能可能受限。建议使用微信登录获得完整体验。',
-            confirmText: '知道了',
-            showCancel: false
-          })
-        }, 2000)
-      } catch (error) {
-        uni.hideLoading()
-        uni.showToast({
-          title: '测试登录失败',
-          icon: 'none'
-        })
-      }
     },
     
     changeAvatar() {
